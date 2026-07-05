@@ -1,0 +1,95 @@
+import { GeneratorConfig } from "@/types/generator";
+
+export const hotelBillConfig: GeneratorConfig = {
+  slug: "hotel-bill",
+  name: "Hotel Bill",
+  title: "Hotel Bill Generator — Hotel Stay Tax Invoice & Folio Maker",
+  description:
+    "Create a realistic hotel stay invoice or guest folio for any hotel. Add guest, room and check-in/out details, itemise room rent, food and laundry charges, apply CGST/SGST, pick a template and currency, then download a print-ready PDF.",
+  icon: "fa-hotel",
+  category: "Commerce & Business",
+  popular: false,
+  hasThemes: false,
+  hasCrumple: false,
+  templates: [
+    { id: "template-1", label: "Tax Invoice" },
+    { id: "template-2", label: "Folio" },
+  ],
+  fields: [
+    // --- Hotel ---
+    { name: "hotelName", label: "Hotel Name", type: "text", group: "Hotel", placeholder: "The Grand Residency" },
+    { name: "address", label: "Hotel Address", type: "textarea", group: "Hotel", placeholder: "12 MG Road, Bandra West, Mumbai, Maharashtra 400050" },
+    { name: "gstin", label: "GSTIN", type: "text", group: "Hotel", half: true, placeholder: "27AABCG1234H1Z9" },
+    { name: "folioNo", label: "Folio / Invoice No.", type: "text", group: "Hotel", half: true, placeholder: "INV-2026-1184" },
+    { name: "guestName", label: "Guest Name", type: "text", group: "Hotel", half: true, placeholder: "Mr. Rohan Mehta" },
+    { name: "roomNo", label: "Room No.", type: "text", group: "Hotel", half: true, placeholder: "412" },
+    {
+      name: "roomType",
+      label: "Room Type",
+      type: "select",
+      group: "Hotel",
+      half: true,
+      options: [
+        { value: "Standard", label: "Standard" },
+        { value: "Deluxe", label: "Deluxe" },
+        { value: "Executive", label: "Executive" },
+        { value: "Suite", label: "Suite" },
+      ],
+    },
+    { name: "nights", label: "No. of Nights", type: "number", group: "Hotel", half: true, placeholder: "3" },
+    { name: "checkIn", label: "Check-In Date", type: "date", group: "Hotel", half: true },
+    { name: "checkOut", label: "Check-Out Date", type: "date", group: "Hotel", half: true },
+
+    // --- Charges ---
+    {
+      name: "items",
+      label: "Charges",
+      type: "items",
+      group: "Charges",
+      addLabel: "Add charge",
+      columns: [
+        { key: "desc", label: "Description", type: "text", grow: 3 },
+        { key: "qty", label: "Qty", type: "number", grow: 1 },
+        { key: "rate", label: "Rate", type: "number", grow: 1 },
+      ],
+    },
+    { name: "cgstPct", label: "CGST %", type: "number", group: "Charges", half: true, placeholder: "6" },
+    { name: "sgstPct", label: "SGST %", type: "number", group: "Charges", half: true, placeholder: "6" },
+    { name: "currency", label: "Currency", type: "currency", group: "Charges", half: true },
+    {
+      name: "paymentMethod",
+      label: "Payment Method",
+      type: "select",
+      group: "Charges",
+      half: true,
+      options: [
+        { value: "Credit Card", label: "Credit Card" },
+        { value: "Debit Card", label: "Debit Card" },
+        { value: "UPI", label: "UPI" },
+        { value: "Net Banking", label: "Net Banking" },
+        { value: "Cash", label: "Cash" },
+      ],
+    },
+  ],
+  defaults: {
+    hotelName: "The Grand Residency",
+    address: "12 MG Road, Bandra West, Mumbai, Maharashtra 400050",
+    gstin: "27AABCG1234H1Z9",
+    folioNo: "INV-2026-1184",
+    guestName: "Mr. Rohan Mehta",
+    roomNo: "412",
+    roomType: "Deluxe",
+    nights: "3",
+    checkIn: "",
+    checkOut: "",
+    items: JSON.stringify([
+      { desc: "Room Rent (Deluxe)", qty: "3", rate: "4500" },
+      { desc: "Food & Beverages", qty: "1", rate: "2350" },
+      { desc: "Laundry", qty: "1", rate: "450" },
+    ]),
+    cgstPct: "6",
+    sgstPct: "6",
+    currency: "INR",
+    paymentMethod: "Credit Card",
+  },
+};

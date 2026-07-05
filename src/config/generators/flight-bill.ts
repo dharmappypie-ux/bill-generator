@@ -1,0 +1,92 @@
+import { GeneratorConfig } from "@/types/generator";
+
+export const flightBillConfig: GeneratorConfig = {
+  slug: "flight-bill",
+  name: "Flight Bill",
+  title: "Flight Bill Generator — Airline E-Ticket & Tax Invoice Maker",
+  description:
+    "Create realistic airline e-tickets and flight tax invoices for any carrier. Fill in flight, passenger and fare details, pick a template and currency, and download a PDF in seconds.",
+  icon: "fa-plane",
+  category: "Transportation & Travel",
+  popular: false,
+  hasThemes: false,
+  hasCrumple: false,
+  templates: [
+    { id: "template-1", label: "E-Ticket" },
+    { id: "template-2", label: "Tax Invoice" },
+  ],
+  fields: [
+    // --- Flight Details ---
+    { name: "airline", label: "Airline", type: "text", group: "Flight Details", placeholder: "IndiGo" },
+    { name: "pnr", label: "PNR / Booking Ref", type: "text", group: "Flight Details", half: true, placeholder: "X4K9PZ" },
+    { name: "flightNo", label: "Flight Number", type: "text", group: "Flight Details", half: true, placeholder: "6E 2143" },
+    { name: "fromCity", label: "From (City / Airport)", type: "text", group: "Flight Details", half: true, placeholder: "Delhi (DEL)" },
+    { name: "toCity", label: "To (City / Airport)", type: "text", group: "Flight Details", half: true, placeholder: "Mumbai (BOM)" },
+    { name: "travelDate", label: "Travel Date", type: "date", group: "Flight Details", half: true },
+    { name: "departTime", label: "Departure Time", type: "time", group: "Flight Details", half: true },
+    {
+      name: "travelClass",
+      label: "Travel Class",
+      type: "select",
+      group: "Flight Details",
+      half: true,
+      options: [
+        { value: "Economy", label: "Economy" },
+        { value: "Business", label: "Business" },
+      ],
+    },
+    { name: "seatNo", label: "Seat Number", type: "text", group: "Flight Details", half: true, placeholder: "14A" },
+    { name: "passengerName", label: "Passenger Name", type: "text", group: "Flight Details", placeholder: "Mr. Amit Sharma" },
+
+    // --- Fare & Payment ---
+    { name: "baseFare", label: "Base Fare", type: "number", group: "Fare & Payment", half: true, placeholder: "4200.00" },
+    { name: "taxes", label: "Taxes & Fees", type: "number", group: "Fare & Payment", half: true, placeholder: "780.00" },
+    { name: "convenienceFee", label: "Convenience Fee", type: "number", group: "Fare & Payment", half: true, placeholder: "199.00" },
+    { name: "currency", label: "Currency", type: "currency", group: "Fare & Payment", half: true },
+    { name: "ticketNo", label: "Ticket Number", type: "text", group: "Fare & Payment", half: true, placeholder: "098-2412345678" },
+    {
+      name: "paymentMethod",
+      label: "Payment Method",
+      type: "select",
+      group: "Fare & Payment",
+      half: true,
+      options: [
+        { value: "Credit Card", label: "Credit Card" },
+        { value: "Debit Card", label: "Debit Card" },
+        { value: "UPI", label: "UPI" },
+        { value: "Net Banking", label: "Net Banking" },
+        { value: "Wallet", label: "Wallet" },
+      ],
+    },
+
+    // --- Booking Details ---
+    { name: "agencyName", label: "Travel Agency / Portal", type: "text", group: "Booking Details", placeholder: "MakeMyTrip India Pvt. Ltd." },
+    { name: "agencyAddress", label: "Agency Address", type: "textarea", group: "Booking Details", placeholder: "Tower A, DLF Cyber City, Gurugram, Haryana 122002" },
+    { name: "gstin", label: "GSTIN", type: "text", group: "Booking Details", half: true, placeholder: "06AADCM1234F1Z5" },
+    { name: "invoiceNo", label: "Invoice Number", type: "text", group: "Booking Details", half: true, placeholder: "INV-2026-08841" },
+    { name: "bookingDate", label: "Booking Date", type: "date", group: "Booking Details", half: true },
+  ],
+  defaults: {
+    airline: "IndiGo",
+    pnr: "X4K9PZ",
+    flightNo: "6E 2143",
+    fromCity: "Delhi (DEL)",
+    toCity: "Mumbai (BOM)",
+    travelDate: "",
+    departTime: "",
+    travelClass: "Economy",
+    seatNo: "14A",
+    passengerName: "Mr. Amit Sharma",
+    baseFare: "4200.00",
+    taxes: "780.00",
+    convenienceFee: "199.00",
+    currency: "INR",
+    ticketNo: "098-2412345678",
+    paymentMethod: "Credit Card",
+    agencyName: "MakeMyTrip India Pvt. Ltd.",
+    agencyAddress: "Tower A, DLF Cyber City, Gurugram, Haryana 122002",
+    gstin: "06AADCM1234F1Z5",
+    invoiceNo: "INV-2026-08841",
+    bookingDate: "",
+  },
+};

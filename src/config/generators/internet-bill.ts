@@ -1,0 +1,61 @@
+import { GeneratorConfig } from "@/types/generator";
+
+export const internetBillConfig: GeneratorConfig = {
+  slug: "internet-bill",
+  name: "Internet Invoice",
+  title: "Internet Bill Generator — Broadband ISP Invoice Online",
+  description:
+    "Generate a broadband internet bill for any ISP. Add account, plan period, monthly charges, installation and tax, pick a template and currency, then download a print-ready PDF.",
+  icon: "fa-wifi",
+  category: "Utilities & Services",
+  popular: false,
+  hasThemes: false,
+  hasCrumple: false,
+  templates: [
+    { id: "template-1", label: "Invoice" },
+    { id: "template-2", label: "Statement" },
+  ],
+  fields: [
+    { name: "ispName", label: "ISP / Provider Name", type: "text", group: "Account", placeholder: "Skyline Broadband" },
+    { name: "accountNo", label: "Account No.", type: "text", group: "Account", half: true, placeholder: "ACC-90381" },
+    { name: "customerName", label: "Customer Name", type: "text", group: "Account", half: true, placeholder: "Rohan Mehta" },
+    { name: "address", label: "Service Address", type: "textarea", group: "Account", placeholder: "Flat 7C, Lake View Apartments, Andheri East, Mumbai 400069" },
+    { name: "planName", label: "Plan Name", type: "text", group: "Account", half: true, placeholder: "Fibre Ultra 200 Mbps" },
+    { name: "billingFrom", label: "Billing Period From", type: "date", group: "Account", half: true },
+    { name: "billingTo", label: "Billing Period To", type: "date", group: "Account", half: true },
+
+    { name: "monthlyCharge", label: "Monthly Charge", type: "number", group: "Charges", half: true, placeholder: "999" },
+    { name: "installation", label: "Installation / One-time", type: "number", group: "Charges", half: true, placeholder: "0" },
+    { name: "tax", label: "GST (18%)", type: "number", group: "Charges", half: true, placeholder: "179.82" },
+    { name: "currency", label: "Currency", type: "currency", group: "Charges", half: true },
+    { name: "invoiceNo", label: "Invoice No.", type: "text", group: "Charges", half: true, placeholder: "INV-2026-0457" },
+    { name: "dueDate", label: "Due Date", type: "date", group: "Charges", half: true },
+    {
+      name: "paymentStatus",
+      label: "Payment Status",
+      type: "select",
+      group: "Charges",
+      half: true,
+      options: [
+        { value: "Paid", label: "Paid" },
+        { value: "Due", label: "Due" },
+      ],
+    },
+  ],
+  defaults: {
+    ispName: "Skyline Broadband",
+    accountNo: "ACC-90381",
+    customerName: "Rohan Mehta",
+    address: "Flat 7C, Lake View Apartments, Andheri East, Mumbai 400069",
+    planName: "Fibre Ultra 200 Mbps",
+    billingFrom: "",
+    billingTo: "",
+    monthlyCharge: "999",
+    installation: "0",
+    tax: "179.82",
+    currency: "INR",
+    invoiceNo: "INV-2026-0457",
+    dueDate: "",
+    paymentStatus: "Due",
+  },
+};

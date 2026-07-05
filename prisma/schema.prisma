@@ -1,0 +1,89 @@
+// Bill Generator — Prisma schema (SQLite for local dev).
+// Swap `provider` to "postgresql" + a Postgres DATABASE_URL for production.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  mobile       String?
+  passwordHash String? // null for OAuth/OTP-only accounts
+  image        String?
+  provider     String   @default("credentials") // credentials | google | otp
+  emailVerified Boolean @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  bills         Bill[]
+  subscription  Subscription?
+  payments      Payment[]
+}
+
+// A completed payment (one row per Stripe checkout) — powers billing history.
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan            String // quarterly | yearly | lifetime
+  amount          Int // in paise/cents
+  currency        String   @default("inr")
+  status          String   @default("paid") // paid | refunded
+  stripeSessionId String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+}
+
+// One-time codes for passwordless / email-verification login.
+model OtpCode {
+  id        String   @id @default(cuid())
+  email     String
+  codeHash  String
+  purpose   String   @default("login") // login | verify
+  expiresAt DateTime
+  consumed  Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+// A saved bill: the generator type + the full form payload as JSON.
+model Bill {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // e.g. "fuel-bill", "rent-receipt"
+  title     String // user-facing label, e.g. "Indian Oil — 12 Jun"
+  template  String   @default("template-1")
+  theme     String   @default("default")
+  currency  String   @default("INR")
+  data      String // JSON-serialized form values
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Active access from a Stripe purchase (or manual grant).
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                 String // quarterly | yearly | lifetime
+  status               String   @default("active") // active | canceled | expired
+  stripeCustomerId     String?
+  stripeSessionId      String?
+  stripeSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

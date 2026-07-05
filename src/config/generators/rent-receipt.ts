@@ -1,0 +1,76 @@
+import { GeneratorConfig } from "@/types/generator";
+
+export const rentReceiptConfig: GeneratorConfig = {
+  slug: "rent-receipt",
+  name: "Rent Receipt",
+  title: "Rent Receipt Generator — HRA Receipts Online",
+  description:
+    "Generate landlord rent receipts for HRA tax exemption. Add tenant, landlord, PAN and period details, choose a template and currency, and download a print-ready PDF.",
+  icon: "fa-house",
+  category: "Professional & Personal",
+  popular: true,
+  hasThemes: false,
+  hasCrumple: false,
+  templates: [
+    { id: "template-1", label: "Standard Receipt" },
+    { id: "template-2", label: "Bordered Form" },
+    { id: "template-3", label: "Minimal" },
+    { id: "template-4", label: "Classic Form" },
+  ],
+  fields: [
+    { name: "receiptNo", label: "Receipt No.", type: "text", group: "Receipt Details", half: true, placeholder: "RR-0042" },
+    { name: "date", label: "Receipt Date", type: "date", group: "Receipt Details", half: true },
+    { name: "amount", label: "Rent Amount", type: "number", group: "Receipt Details", half: true, placeholder: "25000" },
+    { name: "currency", label: "Currency", type: "currency", group: "Receipt Details", half: true },
+    {
+      name: "paymentMode",
+      label: "Payment Mode",
+      type: "select",
+      group: "Receipt Details",
+      half: true,
+      options: [
+        { value: "Cash", label: "Cash" },
+        { value: "Cheque", label: "Cheque" },
+        { value: "Bank Transfer", label: "Bank Transfer" },
+        { value: "UPI", label: "UPI" },
+      ],
+    },
+    { name: "periodFrom", label: "Rent Period From", type: "date", group: "Rent Period", half: true },
+    { name: "periodTo", label: "Rent Period To", type: "date", group: "Rent Period", half: true },
+
+    { name: "tenantName", label: "Tenant Name", type: "text", group: "Tenant", half: true, placeholder: "Amit Sharma" },
+    { name: "tenantPan", label: "Tenant PAN (optional)", type: "text", group: "Tenant", half: true, placeholder: "ABCDE1234F" },
+
+    { name: "landlordName", label: "Landlord / Owner Name", type: "text", group: "Landlord", half: true, placeholder: "Suresh Verma" },
+    { name: "landlordPan", label: "Landlord PAN", type: "text", group: "Landlord", half: true, placeholder: "PQRSX6789K" },
+    { name: "propertyAddress", label: "Rented Property Address", type: "textarea", group: "Landlord", placeholder: "Flat 12B, Green Residency, Pune 411001" },
+
+    // --- Used by the "Classic Form" template (rent-receipt-book style) ---
+    { name: "lastBalance", label: "Last Balance", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "0" },
+    { name: "houseTax", label: "House Tax", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "0" },
+    { name: "electricityBill", label: "Electricity Bill", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "650" },
+    { name: "waterBill", label: "Water Bill", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "150" },
+    { name: "advance", label: "Advance", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "0" },
+    { name: "balance", label: "Balance Due", type: "number", group: "Additional Charges (Classic Form)", half: true, placeholder: "0" },
+  ],
+  defaults: {
+    receiptNo: "RR-0042",
+    date: "",
+    amount: "25000",
+    currency: "INR",
+    paymentMode: "Bank Transfer",
+    periodFrom: "",
+    periodTo: "",
+    tenantName: "Amit Sharma",
+    tenantPan: "",
+    landlordName: "Suresh Verma",
+    landlordPan: "PQRSX6789K",
+    propertyAddress: "Flat 12B, Green Residency, Baner, Pune 411045",
+    lastBalance: "",
+    houseTax: "",
+    electricityBill: "650",
+    waterBill: "150",
+    advance: "",
+    balance: "",
+  },
+};
