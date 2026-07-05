@@ -14,3 +14,8 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+// OpenNext + Cloudflare: populate the Cloudflare context (env bindings like the
+// D1 `DB`) during `next dev` so local development mirrors the Worker runtime.
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getUserByEmail } from "@/lib/repo";
 import { verifyPassword, startSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { email: String(email).toLowerCase() } });
+    const user = await getUserByEmail(String(email).toLowerCase());
     if (!user || !user.passwordHash) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }

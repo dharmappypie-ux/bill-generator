@@ -1,0 +1,24 @@
+{
+  // Cloudflare Workers config for the OpenNext-built Next.js app.
+  // Docs: https://opennext.js.org/cloudflare
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bill-generator",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // D1 database that stores users, OTP codes, saved bills, subscriptions and payments.
+  // Create it once with:  wrangler d1 create bill-generator-db
+  // then paste the printed database_id below (replace REPLACE_WITH_D1_DATABASE_ID).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bill-generator-db",
+      "database_id": "9a1d6074-1c4f-4bd4-83de-3f06b62601d3",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

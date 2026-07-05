@@ -8,6 +8,11 @@
 /out
 next-env.d.ts
 
+# opennext / cloudflare
+/.open-next
+/.wrangler
+.dev.vars
+
 # production
 /build
 

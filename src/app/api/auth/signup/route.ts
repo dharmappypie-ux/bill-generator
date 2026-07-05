@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getUserByEmail, createUser } from "@/lib/repo";
 import { hashPassword, startSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -12,19 +12,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Password must be at least 6 characters." }, { status: 400 });
     }
 
-    const existing = await prisma.user.findUnique({ where: { email: String(email).toLowerCase() } });
+    const existing = await getUserByEmail(String(email).toLowerCase());
     if (existing) {
       return NextResponse.json({ error: "An account with this email already exists." }, { status: 409 });
     }
 
-    const user = await prisma.user.create({
-      data: {
-        email: String(email).toLowerCase(),
-        name: name || null,
-        mobile: mobile || null,
-        passwordHash: await hashPassword(String(password)),
-        provider: "credentials",
-      },
+    const user = await createUser({
+      email: String(email).toLowerCase(),
+      name: name || null,
+      mobile: mobile || null,
+      passwordHash: await hashPassword(String(password)),
+      provider: "credentials",
     });
 
     await startSession({ uid: user.id, email: user.email, name: user.name });

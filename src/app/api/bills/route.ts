@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { listBills, createBill } from "@/lib/repo";
 import { getSession } from "@/lib/auth";
 
 // List the signed-in user's saved bills.
@@ -7,19 +7,7 @@ export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const bills = await prisma.bill.findMany({
-    where: { userId: session.uid },
-    orderBy: { updatedAt: "desc" },
-    select: {
-      id: true,
-      type: true,
-      title: true,
-      template: true,
-      theme: true,
-      currency: true,
-      updatedAt: true,
-    },
-  });
+  const bills = await listBills(session.uid);
   return NextResponse.json({ bills });
 }
 
@@ -34,16 +22,14 @@ export async function POST(req: NextRequest) {
     if (!type || !data) {
       return NextResponse.json({ error: "Missing bill type or data." }, { status: 400 });
     }
-    const bill = await prisma.bill.create({
-      data: {
-        userId: session.uid,
-        type: String(type),
-        title: String(title || type),
-        template: String(template || "template-1"),
-        theme: String(theme || "default"),
-        currency: String(currency || "INR"),
-        data: JSON.stringify(data),
-      },
+    const bill = await createBill({
+      userId: session.uid,
+      type: String(type),
+      title: String(title || type),
+      template: String(template || "template-1"),
+      theme: String(theme || "default"),
+      currency: String(currency || "INR"),
+      data: JSON.stringify(data),
     });
     return NextResponse.json({ bill: { id: bill.id } });
   } catch {

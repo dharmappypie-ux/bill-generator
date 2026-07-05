@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { updateUser } from "@/lib/repo";
 import { getSession } from "@/lib/auth";
 
 // Update the current user's editable profile fields (name, mobile).
@@ -33,10 +33,8 @@ export async function PUT(req: NextRequest) {
       data.mobile = mobile;
     }
 
-    const user = await prisma.user.update({
-      where: { id: session.uid },
-      data,
-    });
+    const user = await updateUser(session.uid, data);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     return NextResponse.json({
       user: {

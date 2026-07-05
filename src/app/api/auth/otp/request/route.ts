@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { invalidateOtps, createOtp } from "@/lib/repo";
 import { generateOtp, hashOtp } from "@/lib/auth";
 import { sendMail, otpEmailHtml } from "@/lib/mail";
 
@@ -11,14 +11,11 @@ export async function POST(req: NextRequest) {
 
     const code = generateOtp();
     const codeHash = await hashOtp(code);
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 min
 
-    // Invalidate prior unconsumed codes for this email.
-    await prisma.otpCode.updateMany({
-      where: { email: normalized, consumed: false, purpose: "login" },
-      data: { consumed: true },
-    });
-    await prisma.otpCode.create({ data: { email: normalized, codeHash, purpose: "login", expiresAt } });
+    // Invalidate prior unconsumed codes for this email, then store the new one.
+    await invalidateOtps(normalized, "login");
+    await createOtp(normalized, codeHash, "login", expiresAt);
 
     const { delivered } = await sendMail({
       to: normalized,

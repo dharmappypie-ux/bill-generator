@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getUserById, updateUser } from "@/lib/repo";
 import { getSession, hashPassword, verifyPassword } from "@/lib/auth";
 
 // Set or change the current user's password.
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await prisma.user.findUnique({ where: { id: session.uid } });
+    const user = await getUserById(session.uid);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     // Existing password holders must verify their current password.
@@ -34,10 +34,7 @@ export async function POST(req: NextRequest) {
     }
     // OAuth/OTP accounts (no passwordHash) may set one without currentPassword.
 
-    await prisma.user.update({
-      where: { id: session.uid },
-      data: { passwordHash: await hashPassword(newPassword) },
-    });
+    await updateUser(session.uid, { passwordHash: await hashPassword(newPassword) });
 
     return NextResponse.json({ ok: true });
   } catch {

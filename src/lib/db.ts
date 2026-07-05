@@ -1,13 +1,16 @@
-import { PrismaClient } from "@prisma/client";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-// Reuse a single PrismaClient across hot-reloads in dev to avoid exhausting
-// SQLite connections.
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
-  });
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Returns the D1 database binding for the current request.
+// The binding name ("DB") is declared in wrangler.jsonc and the Cloudflare
+// dashboard. Bindings are only available during a request, so call this
+// inside route handlers / server actions — never at module top-level.
+export function getDB(): D1Database {
+  const { env } = getCloudflareContext();
+  const db = env.DB;
+  if (!db) {
+    throw new Error(
+      "D1 binding 'DB' is not configured. Create the database and bind it (see wrangler.jsonc)."
+    );
+  }
+  return db;
+}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { upsertUserByEmail } from "@/lib/repo";
 import { startSession } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
@@ -38,21 +38,20 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(`${appUrl}/?auth_error=google_failed`);
     }
 
-    const user = await prisma.user.upsert({
-      where: { email: String(profile.email).toLowerCase() },
-      update: {
-        name: profile.name || undefined,
-        image: profile.picture || undefined,
-        emailVerified: true,
-      },
-      create: {
-        email: String(profile.email).toLowerCase(),
+    const user = await upsertUserByEmail(
+      String(profile.email).toLowerCase(),
+      {
         name: profile.name || null,
         image: profile.picture || null,
         provider: "google",
         emailVerified: true,
       },
-    });
+      {
+        name: profile.name || undefined,
+        image: profile.picture || undefined,
+        emailVerified: true,
+      }
+    );
 
     await startSession({ uid: user.id, email: user.email, name: user.name });
     return NextResponse.redirect(`${appUrl}/dashboard`);

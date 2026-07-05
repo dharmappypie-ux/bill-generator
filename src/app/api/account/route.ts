@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getUserById, getSubscription, listPayments } from "@/lib/repo";
 import { getSession } from "@/lib/auth";
 
 // Load the current user's account overview: profile, active subscription, recent payments.
@@ -8,22 +8,20 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: session.uid },
-      include: {
-        subscription: true,
-        payments: { orderBy: { createdAt: "desc" }, take: 50 },
-      },
-    });
-
+    const user = await getUserById(session.uid);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const [sub, payments] = await Promise.all([
+      getSubscription(user.id),
+      listPayments(user.id, 50),
+    ]);
+
     const subscription =
-      user.subscription && user.subscription.status === "active"
+      sub && sub.status === "active"
         ? {
-            plan: user.subscription.plan,
-            status: user.subscription.status,
-            currentPeriodEnd: user.subscription.currentPeriodEnd,
+            plan: sub.plan,
+            status: sub.status,
+            currentPeriodEnd: sub.currentPeriodEnd,
           }
         : null;
 
@@ -40,14 +38,7 @@ export async function GET() {
         hasPassword: Boolean(user.passwordHash),
       },
       subscription,
-      payments: user.payments.map((p) => ({
-        id: p.id,
-        plan: p.plan,
-        amount: p.amount,
-        currency: p.currency,
-        status: p.status,
-        createdAt: p.createdAt,
-      })),
+      payments,
     });
   } catch {
     return NextResponse.json({ error: "Could not load account." }, { status: 500 });

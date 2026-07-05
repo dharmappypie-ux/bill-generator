@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
-import { prisma } from "./db";
+import { getUserById, getSubscription } from "./repo";
 
 const COOKIE = "bg_session";
 const ONE_WEEK = 60 * 60 * 24 * 7;
@@ -74,10 +74,10 @@ export async function getSession(): Promise<SessionPayload | null> {
 export async function getCurrentUser() {
   const session = await getSession();
   if (!session) return null;
-  return prisma.user.findUnique({
-    where: { id: session.uid },
-    include: { subscription: true },
-  });
+  const user = await getUserById(session.uid);
+  if (!user) return null;
+  const subscription = await getSubscription(user.id);
+  return { ...user, subscription };
 }
 
 export function generateOtp(): string {
