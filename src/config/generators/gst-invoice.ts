@@ -5,7 +5,7 @@ export const gstInvoiceConfig: GeneratorConfig = {
   name: "GST Invoice",
   title: "GST Invoice Generator — GST Tax Invoice Maker with CGST/SGST & IGST",
   description:
-    "Create a fully compliant GST tax invoice in seconds. Add seller and buyer GSTIN, place of supply and line items, choose CGST+SGST or IGST, and download a print-ready PDF with the taxable value, tax breakup and grand total.",
+    "Create a fully compliant GST tax invoice in seconds. Add your logo, seller and buyer GSTIN, place of supply and line items, choose CGST+SGST or IGST, add notes and terms, and download a print-ready PDF with the taxable value, tax breakup, amount paid and balance due. Also makes Bill of Supply, Proforma and non-GST invoices.",
   icon: "fa-file-invoice",
   category: "Commerce & Business",
   popular: false,
@@ -14,21 +14,51 @@ export const gstInvoiceConfig: GeneratorConfig = {
   templates: [
     { id: "template-1", label: "Tax Invoice" },
     { id: "template-2", label: "Simple Invoice" },
+    { id: "template-3", label: "Colored Header" },
+    { id: "template-4", label: "Modern Two-Tone" },
+    { id: "template-5", label: "Minimal Mono" },
+    { id: "template-6", label: "Corporate Boxed" },
   ],
   fields: [
-    // --- Seller ---
+    // --- Business / Logo ---
+    {
+      name: "logo",
+      label: "Business Logo",
+      type: "logo",
+      group: "Your Business",
+      logos: [
+        { id: "aurora", label: "Aurora", src: "/invoice-logos/aurora.svg" },
+        { id: "orbit", label: "Orbit", src: "/invoice-logos/orbit.svg" },
+        { id: "prism", label: "Prism", src: "/invoice-logos/prism.svg" },
+        { id: "bloom", label: "Bloom", src: "/invoice-logos/bloom.svg" },
+      ],
+    },
+    {
+      name: "invoiceType",
+      label: "Invoice Type",
+      type: "select",
+      group: "Your Business",
+      half: true,
+      options: [
+        { value: "Tax Invoice", label: "Tax Invoice (GST)" },
+        { value: "Bill of Supply", label: "Bill of Supply (no GST)" },
+        { value: "Proforma Invoice", label: "Proforma Invoice" },
+        { value: "Invoice", label: "Invoice (non-GST)" },
+      ],
+    },
     {
       name: "sellerName",
       label: "Seller / Business Name",
       type: "text",
-      group: "Seller",
+      group: "Your Business",
+      half: true,
       placeholder: "Sharma Enterprises Pvt. Ltd.",
     },
     {
       name: "sellerGstin",
       label: "Seller GSTIN",
       type: "text",
-      group: "Seller",
+      group: "Your Business",
       half: true,
       placeholder: "29ABCDE1234F1Z5",
     },
@@ -36,7 +66,7 @@ export const gstInvoiceConfig: GeneratorConfig = {
       name: "sellerState",
       label: "Seller State",
       type: "text",
-      group: "Seller",
+      group: "Your Business",
       half: true,
       placeholder: "Karnataka (29)",
     },
@@ -44,7 +74,7 @@ export const gstInvoiceConfig: GeneratorConfig = {
       name: "sellerAddress",
       label: "Seller Address",
       type: "textarea",
-      group: "Seller",
+      group: "Your Business",
       placeholder: "14, MG Road, Indiranagar, Bengaluru, Karnataka - 560038",
     },
 
@@ -90,11 +120,13 @@ export const gstInvoiceConfig: GeneratorConfig = {
       placeholder: "INV-2026-0042",
     },
     { name: "invoiceDate", label: "Invoice Date", type: "date", group: "Invoice", half: true },
+    { name: "dueDate", label: "Due Date", type: "date", group: "Invoice", half: true },
     {
       name: "placeOfSupply",
       label: "Place of Supply",
       type: "text",
       group: "Invoice",
+      half: true,
       placeholder: "Maharashtra (27)",
     },
 
@@ -118,7 +150,7 @@ export const gstInvoiceConfig: GeneratorConfig = {
       name: "taxType",
       label: "Tax Type",
       type: "select",
-      group: "Tax",
+      group: "Tax & Payment",
       half: true,
       options: [
         { value: "CGST+SGST", label: "CGST + SGST (Intra-state)" },
@@ -129,13 +161,39 @@ export const gstInvoiceConfig: GeneratorConfig = {
       name: "gstPct",
       label: "GST Rate (%)",
       type: "number",
-      group: "Tax",
+      group: "Tax & Payment",
       half: true,
       placeholder: "18",
     },
-    { name: "currency", label: "Currency", type: "currency", group: "Tax", half: true },
+    { name: "currency", label: "Currency", type: "currency", group: "Tax & Payment", half: true },
+    {
+      name: "amountPaid",
+      label: "Amount Paid",
+      type: "number",
+      group: "Tax & Payment",
+      half: true,
+      placeholder: "0.00",
+    },
+
+    // --- Notes ---
+    {
+      name: "notes",
+      label: "Notes",
+      type: "textarea",
+      group: "Notes & Terms",
+      placeholder: "Thank you for your business!",
+    },
+    {
+      name: "terms",
+      label: "Terms & Conditions",
+      type: "textarea",
+      group: "Notes & Terms",
+      placeholder: "Payment due within 15 days. Goods once sold will not be taken back.",
+    },
   ],
   defaults: {
+    logo: "aurora",
+    invoiceType: "Tax Invoice",
     sellerName: "Sharma Enterprises Pvt. Ltd.",
     sellerGstin: "29ABCDE1234F1Z5",
     sellerState: "Karnataka (29)",
@@ -146,6 +204,7 @@ export const gstInvoiceConfig: GeneratorConfig = {
     buyerAddress: "302, Linking Road, Bandra West, Mumbai, Maharashtra - 400050",
     invoiceNo: "INV-2026-0042",
     invoiceDate: "",
+    dueDate: "",
     placeOfSupply: "Maharashtra (27)",
     items: JSON.stringify([
       { desc: "Cotton T-Shirt (Round Neck)", hsn: "6109", qty: "10", rate: "320" },
@@ -154,5 +213,8 @@ export const gstInvoiceConfig: GeneratorConfig = {
     taxType: "IGST",
     gstPct: "18",
     currency: "INR",
+    amountPaid: "0.00",
+    notes: "Thank you for your business!",
+    terms: "Payment due within 15 days. Goods once sold will not be taken back.",
   },
 };

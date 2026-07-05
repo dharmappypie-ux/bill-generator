@@ -71,10 +71,19 @@ function Field({
   }
 
   if (field.type === "logo") {
+    const uploaded = str.startsWith("data:");
+    const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => onChange(field.name, String(reader.result));
+      reader.readAsDataURL(file);
+      e.target.value = "";
+    };
     return (
       <div className={wrap}>
         <label className="field-label">{field.label}</label>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {field.logos?.map((logo) => (
             <button
               key={logo.id}
@@ -89,6 +98,30 @@ function Field({
               <img src={logo.src} alt={logo.label} className="h-7 w-auto" />
             </button>
           ))}
+          {/* Upload your own logo (stored inline as a data URL) */}
+          <label
+            className={`flex cursor-pointer items-center gap-2 rounded-lg border-2 bg-white px-3 py-1.5 text-[13px] font-semibold transition ${
+              uploaded ? "border-brand ring-2 ring-brand-100 text-brand" : "border-dashed border-line2 text-inkSoft hover:border-brand-300"
+            }`}
+            title="Upload your own logo"
+          >
+            {uploaded ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={str} alt="Uploaded logo" className="h-7 w-auto" />
+            ) : (
+              <span>+ Upload</span>
+            )}
+            <input type="file" accept="image/*" className="hidden" onChange={onFile} />
+          </label>
+          {(uploaded || value) && (
+            <button
+              type="button"
+              onClick={() => onChange(field.name, "")}
+              className="text-[12px] font-medium text-inkSoft underline hover:text-ink"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
     );
