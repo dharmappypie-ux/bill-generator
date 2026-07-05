@@ -108,6 +108,30 @@ const BRANDS: Record<string, Brand> = {
     app: "DOWNLOAD THE NAYARA APP",
     tagline: "Driven by Energy",
   },
+  jio: {
+    name: "Jio-bp",
+    welcome: "WELCOME TO Jio-bp",
+    footer: [
+      "THANK YOU FOR FUELLING WITH JIO-BP",
+      "MOBILITY THAT MOVES YOU",
+      "TOLL-FREE: 1800 891 9023",
+      "VISIT AGAIN",
+    ],
+    app: "DOWNLOAD THE JIO-BP PULSE APP",
+    tagline: "Mobility that moves you",
+  },
+  nayara: {
+    name: "Nayara Energy",
+    welcome: "WELCOME TO Nayara Energy",
+    footer: [
+      "THANK YOU FOR FUELLING WITH NAYARA",
+      "FUELLING PROGRESS, EVERY MILE",
+      "CUSTOMER CARE: 1800 266 6666",
+      "VISIT AGAIN - DRIVE SAFE",
+    ],
+    app: "DOWNLOAD THE NAYARA REWARDS APP",
+    tagline: "Driven by Energy",
+  },
 };
 function brandOf(logo: string): Brand {
   return (

@@ -31,6 +31,8 @@ export const fuelBillConfig: GeneratorConfig = {
         { id: "bpcl", label: "Bharat Petroleum", src: "/brands/bpcl.svg" },
         { id: "hpcl", label: "HP Oil", src: "/brands/hpcl.svg" },
         { id: "essar", label: "Essar Oil", src: "/brands/essar.svg" },
+        { id: "jio", label: "Jio-bp", src: "/brands/jio.svg" },
+        { id: "nayara", label: "Nayara Energy", src: "/brands/nayara.svg" },
       ],
     },
     { name: "stationName", label: "Fuel Station Name", type: "text", group: "Fuel Station Details", placeholder: "Sri Sai Fuel Station" },
