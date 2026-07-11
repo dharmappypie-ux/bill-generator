@@ -47,6 +47,7 @@ export default function Footer() {
             {[
               ["/", "Home"],
               ["/bills", "All Generators"],
+              ["/tools", "Free Tools"],
               ["/pricing", "Pricing"],
               ["/contact", "Contact Us"],
               ["/dashboard", "My Bills"],

@@ -69,6 +69,7 @@ export default function Header() {
             )}
           </div>
 
+          {navLink("/tools", "Free Tools")}
           {navLink("/pricing", "Pricing")}
           {navLink("/contact", "Contact Us")}
         </nav>
@@ -144,6 +145,7 @@ export default function Header() {
               </div>
             ))}
             <div className="flex gap-2 pt-2">
+              <Link href="/tools" className="btn-ghost flex-1" onClick={() => setMobileOpen(false)}>Free Tools</Link>
               <Link href="/pricing" className="btn-ghost flex-1" onClick={() => setMobileOpen(false)}>Pricing</Link>
               <Link href="/contact" className="btn-ghost flex-1" onClick={() => setMobileOpen(false)}>Contact</Link>
             </div>
